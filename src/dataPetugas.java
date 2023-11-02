@@ -1,3 +1,12 @@
+
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import javax.swing.table.DefaultTableModel;
+import static koneksi.koneksi.koneksi;
+
+
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
@@ -8,13 +17,16 @@
  * @author SMKI Utama2
  */
 public class dataPetugas extends javax.swing.JFrame {
-
+    private DefaultTableModel model;
     /**
      * Creates new form dataPetugas
      */
     public dataPetugas() {
         initComponents();
+          loadData();
+//        kosong();
     }
+    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -87,6 +99,11 @@ public class dataPetugas extends javax.swing.JFrame {
         });
 
         btnadd.setText("Add New");
+        btnadd.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnaddActionPerformed(evt);
+            }
+        });
 
         btnsave.setText("Save");
         btnsave.addActionListener(new java.awt.event.ActionListener() {
@@ -121,48 +138,51 @@ public class dataPetugas extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(36, 36, 36)
-                .addComponent(jLabel1)
-                .addGap(7, 7, 7)
-                .addComponent(txt_id, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE))
-            .addGroup(layout.createSequentialGroup()
-                .addGap(20, 20, 20)
-                .addComponent(jLabel2)
-                .addGap(3, 3, 3)
-                .addComponent(txtnama, javax.swing.GroupLayout.PREFERRED_SIZE, 234, javax.swing.GroupLayout.PREFERRED_SIZE))
-            .addGroup(layout.createSequentialGroup()
-                .addGap(10, 10, 10)
-                .addComponent(jLabel3)
-                .addGap(7, 7, 7)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-            .addGroup(layout.createSequentialGroup()
-                .addGap(50, 50, 50)
-                .addComponent(jLabel4)
-                .addGap(17, 17, 17)
-                .addComponent(txtemail, javax.swing.GroupLayout.PREFERRED_SIZE, 234, javax.swing.GroupLayout.PREFERRED_SIZE))
-            .addGroup(layout.createSequentialGroup()
-                .addGap(50, 50, 50)
-                .addComponent(jLabel5)
-                .addGap(8, 8, 8)
-                .addComponent(txt_telp, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(13, 13, 13)
-                .addComponent(jLabel6))
-            .addGroup(layout.createSequentialGroup()
-                .addGap(100, 100, 100)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 270, javax.swing.GroupLayout.PREFERRED_SIZE))
-            .addGroup(layout.createSequentialGroup()
-                .addGap(30, 30, 30)
-                .addComponent(btnadd)
-                .addGap(11, 11, 11)
-                .addComponent(btnsave)
-                .addGap(18, 18, 18)
-                .addComponent(btnupdate)
-                .addGap(18, 18, 18)
-                .addComponent(btndelete)
-                .addGap(18, 18, 18)
-                .addComponent(btncancel)
-                .addGap(18, 18, 18)
-                .addComponent(btnclose))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(36, 36, 36)
+                        .addComponent(jLabel1)
+                        .addGap(7, 7, 7)
+                        .addComponent(txt_id, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(20, 20, 20)
+                        .addComponent(jLabel2)
+                        .addGap(3, 3, 3)
+                        .addComponent(txtnama, javax.swing.GroupLayout.PREFERRED_SIZE, 234, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(10, 10, 10)
+                        .addComponent(jLabel3)
+                        .addGap(7, 7, 7)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(50, 50, 50)
+                        .addComponent(jLabel4)
+                        .addGap(17, 17, 17)
+                        .addComponent(txtemail, javax.swing.GroupLayout.PREFERRED_SIZE, 234, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(50, 50, 50)
+                        .addComponent(jLabel5)
+                        .addGap(8, 8, 8)
+                        .addComponent(txt_telp, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(13, 13, 13)
+                        .addComponent(jLabel6))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(30, 30, 30)
+                        .addComponent(btnadd)
+                        .addGap(11, 11, 11)
+                        .addComponent(btnsave)
+                        .addGap(18, 18, 18)
+                        .addComponent(btnupdate)
+                        .addGap(18, 18, 18)
+                        .addComponent(btndelete)
+                        .addGap(18, 18, 18)
+                        .addComponent(btncancel)
+                        .addGap(18, 18, 18)
+                        .addComponent(btnclose))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(100, 100, 100)
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 306, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(104, 104, 104))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -206,7 +226,49 @@ public class dataPetugas extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
+private void loadData(){
+        //membuat model
+        model = new DefaultTableModel();
+        
+        //menghapus seluruh data
+        model.getDataVector().removeAllElements();
+        //memberi tahu bahwa data telah kosong
+        model.fireTableDataChanged();
+        
+        tablepetugas.setModel(model);
+        model.addColumn("NamaPetugas");
+        model.addColumn("Alamat");
+        model.addColumn("Email");
+        model.addColumn("Telepon");
+      
+        
+        try{
+            
+        
+         String sql = "SELECT * From tblpetugas";   
+         
+         Connection c = koneksi.getkoneksi();
+         Statement s = c.createStatement();
+         ResultSet r = s.executeQuery(sql);
+         
+         while(r.next()){
+         //lakukan penelusuran baris
+         model.addRow(new Object[]{
+             r.getString(1),
+             r.getString(2),
+             r.getDate(3),
+             r.getString(4),
+             r.getString(5)
+         });
+         } 
+         tablepetugas.setModel(model);
+    }catch(SQLException e){
+        System.out.println("Terjadi Error"+e.getMessage());
+        
+        
+        
+    }
+}
     private void btnsaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnsaveActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_btnsaveActionPerformed
@@ -226,6 +288,15 @@ public class dataPetugas extends javax.swing.JFrame {
     private void txt_idActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_idActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txt_idActionPerformed
+
+    private void btnaddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnaddActionPerformed
+        // TODO add your handling code here:
+        String id = txt_id.getText();
+        String nama = txtnama.getText();
+        String alamat = txtalamat.getText();
+        String email = txtemail.getText();
+        String telepon = txt_telp.getText();
+    }//GEN-LAST:event_btnaddActionPerformed
 
     /**
      * @param args the command line arguments
