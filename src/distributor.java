@@ -1,3 +1,13 @@
+import java.awt.event.KeyEvent;
+import javax.swing.table.DefaultTableModel;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.sql.PreparedStatement;
+import java.sql.Connection;
+import javax.swing.JOptionPane;
+import koneksi.koneksi;
+
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
@@ -9,11 +19,15 @@
  */
 public class distributor extends javax.swing.JFrame {
 
+     private DefaultTableModel model;
+    
     /**
      * Creates new form distributor
      */
     public distributor() {
         initComponents();
+        loadData();
+        kosong();
     }
 
     /**
@@ -41,7 +55,7 @@ public class distributor extends javax.swing.JFrame {
         txtemail = new javax.swing.JTextField();
         txttelepon = new javax.swing.JTextField();
         jScrollPane3 = new javax.swing.JScrollPane();
-        jTable2 = new javax.swing.JTable();
+        tabelbarang = new javax.swing.JTable();
         btntambah = new javax.swing.JButton();
         btnsimpan = new javax.swing.JButton();
         btnubah = new javax.swing.JButton();
@@ -81,7 +95,7 @@ public class distributor extends javax.swing.JFrame {
         txtalamat.setRows(5);
         jScrollPane1.setViewportView(txtalamat);
 
-        jTable2.setModel(new javax.swing.table.DefaultTableModel(
+        tabelbarang.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -92,9 +106,19 @@ public class distributor extends javax.swing.JFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        jScrollPane3.setViewportView(jTable2);
+        tabelbarang.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tabelbarangMouseClicked(evt);
+            }
+        });
+        jScrollPane3.setViewportView(tabelbarang);
 
         btntambah.setText("Add New");
+        btntambah.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btntambahActionPerformed(evt);
+            }
+        });
 
         btnsimpan.setText("Save");
 
@@ -206,9 +230,102 @@ public class distributor extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void loadData(){
+        model = new DefaultTableModel();
+        model.getDataVector().removeAllElements();      
+        model.fireTableDataChanged();
+        
+        tabelbarang.setModel(model);
+        model.addColumn("ID");
+        model.addColumn("Nama Distributor");
+        model.addColumn("Alamat Distributor");
+        model.addColumn("Kota Asal");
+        model.addColumn("Email");
+        model.addColumn("Telepon");
+        
+        try{
+            String sql = "SELECT * FROM tbdistributor";
+            
+            Connection c = koneksi.getKoneksi();
+            Statement s = c.createStatement();
+            ResultSet r = s.executeQuery (sql);
+            
+             while (r.next()){
+                model.addRow(new Object[]{
+                    r.getString(1),
+                    r.getString(2),
+                    r.getString(3),
+                    r.getString(4),
+                    r.getString(5),
+                    r.getString(6)
+                });  
+            }
+             tabelbarang.setModel(model);
+            }catch(SQLException e){
+                System.out.println("");
+        }
+    }
+    
+    private void kosong(){
+        txtid.setText(null);
+        txtnama.setText(null);
+        txtalamat.setText(null);
+        txtkota.setText(null);
+        txtemail.setText(null);
+        txttelepon.setText(null);
+    }
     private void btnbatalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnbatalActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_btnbatalActionPerformed
+
+    private void btntambahActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btntambahActionPerformed
+        // TODO add your handling code here:
+        String ID_Distributor = txtid.getText();
+        String Nama_Distributor = txtnama.getText();
+        String Alamat = txtalamat.getText();
+        String Kota_Asal = txtkota.getText();
+        String Email = txtemail.getText();
+        String Telepon = txttelepon.getText();
+        
+        if("".equals(ID_Distributor) || "".equals(Nama_Distributor) ||
+                "".equals(Alamat) ||
+                "".equals(Kota_Asal) || "".equals(Email) || "".equals(Telepon))
+            {
+              JOptionPane.showMessageDialog(this, "Harap Lengkapi Data Terlebih Dahulu", "Error", JOptionPane.WARNING_MESSAGE);
+            } else {
+            
+            try{
+                Connection c = koneksi.getKoneksi();
+                String sql = "INSERT INTO tbdistributor VALUES (?, ?, ?, ?, ?,?)";
+                PreparedStatement p = c.prepareStatement(sql);
+                
+                p.setString(1, ID_Distributor);
+                p.setString(2, Nama_Distributor);
+                p.setString(3, Alamat);
+                p.setString(4, Kota_Asal);
+                p.setString(5, Email);
+                p.setString(6, Telepon);
+                
+                p.executeUpdate();
+                p.close();
+                
+                JOptionPane.showMessageDialog(null,
+                        "Penyimpanan Data Berhasil");
+                
+            }catch(SQLException e){
+                JOptionPane.showMessageDialog(this,
+                        e.getMessage());
+            }finally{
+                loadData();
+                kosong();
+            }
+        }
+    }//GEN-LAST:event_btntambahActionPerformed
+
+    private void tabelbarangMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tabelbarangMouseClicked
+        // TODO add your handling code here:
+
+    }//GEN-LAST:event_tabelbarangMouseClicked
 
     /**
      * @param args the command line arguments
@@ -263,7 +380,7 @@ public class distributor extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JTable jTable1;
-    private javax.swing.JTable jTable2;
+    private javax.swing.JTable tabelbarang;
     private javax.swing.JTextArea txtalamat;
     private javax.swing.JTextField txtemail;
     private javax.swing.JTextField txtid;
