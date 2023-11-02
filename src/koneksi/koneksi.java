@@ -13,10 +13,10 @@ import java.sql.SQLException;
 public class koneksi {
     private static Connection koneksi;
     
-    public static Connection getKoneksi(){
+    public static Connection getkoneksi(){
         if (koneksi == null) {
             try {
-                String url = "jdbc:mysql://localhost:3306/db_penjualan_barang_pas_xiia";
+                String url ="jdbc:mysql://localhost:3306/db_penjualan_barang_pas_xiib?";
                 String user = "root";
                 String password = "";
                 DriverManager.registerDriver(new com.mysql.cj.jdbc.Driver());
@@ -29,6 +29,6 @@ public class koneksi {
         return koneksi;
     }
     public static void main(String args[]){
-        getKoneksi();
+        getkoneksi();
     }  
 }
