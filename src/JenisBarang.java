@@ -42,7 +42,7 @@ public class JenisBarang extends javax.swing.JFrame {
         
         try{
             
-            String sql = "SELECT * FROM tb_barang";
+            String sql = "SELECT * FROM tbljenis";
             
             Connection c = koneksi.getkoneksi();
             Statement s = c.createStatement();
@@ -115,9 +115,14 @@ public class JenisBarang extends javax.swing.JFrame {
         });
         jScrollPane1.setViewportView(tb_barang);
 
-        getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 100, 430, 150));
+        getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 100, 510, 150));
 
         btnadd.setText("Add Text");
+        btnadd.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnaddActionPerformed(evt);
+            }
+        });
         getContentPane().add(btnadd, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 260, 80, 20));
 
         btnsave.setText("Save");
@@ -164,14 +169,16 @@ public class JenisBarang extends javax.swing.JFrame {
         }
 
         String kode = (String) model.getValueAt(i, 0);
+        String Jenis = (String) model.getValueAt(i, 1);
 
         try{
             Connection c = koneksi.getkoneksi();
 
-            String sql = "DELETE FROM tb_jenis_barang WHERE kode_jenis = ?";
+            String sql = "DELETE FROM tb_barang WHERE KodeJenis = ?";
 
             PreparedStatement p = c.prepareStatement(sql);
             p.setString(1, kode);
+            p.setString(2, Jenis);
             p.executeUpdate();
             p.close();
 
@@ -198,12 +205,12 @@ public class JenisBarang extends javax.swing.JFrame {
         try{
             Connection c = koneksi.getkoneksi();
 
-            String sql = "UPDATE tb_jenis_barang SET jenis_barang = ? WHERE kode_jenis";
+            String sql = "UPDATE tbljenis SET kode_jenis = ? WHERE jenis_kode";
 
             PreparedStatement p = c.prepareStatement(sql);
 
-            p.setString(1, jenis);
-            p.setString(2, kode);
+            p.setString(1, kode);
+            p.setString(2, jenis);
 
             p.executeUpdate();
             p.close();
@@ -221,9 +228,9 @@ public class JenisBarang extends javax.swing.JFrame {
     private void btnsaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnsaveActionPerformed
         // TODO add your handling code here:
          String kode = txtkodejenis.getText();
-        String Jenis = txtjenisbarang.getText();
+        String jenis = txtjenisbarang.getText();
 
-        if ("".equals(kode)|| "".equals(Jenis))
+        if ("".equals(kode)|| "".equals(jenis))
 
         {
             JOptionPane.showMessageDialog(this, "harap lengkap data", "error", JOptionPane.WARNING_MESSAGE);
@@ -231,11 +238,11 @@ public class JenisBarang extends javax.swing.JFrame {
 
             try{
                 Connection c = koneksi.getkoneksi();
-                String sql = "INSERT INTO tb_jenis_barang VALUES (?,?)";
+                String sql = "INSERT INTO tbljenis ()VALUES (?,?)";
                 PreparedStatement p = c.prepareStatement(sql);
 
                 p.setString(1, kode);
-                p.setString(2, Jenis);
+                p.setString(2, jenis);
 
                 p.executeUpdate();
                 p.close();
@@ -261,11 +268,45 @@ public class JenisBarang extends javax.swing.JFrame {
         
     }    
         
-        String jenis_barang = tb_barang.getValueAt(baris, 2).toString();
-        txtjenisbarang.setText(jenis_barang);
-       String KodeBarang = tb_barang.getValueAt(baris, 1).toString();
-       txtjenisbarang.setText(jenis_barang);
+       String kode = tb_barang.getValueAt(baris, 1).toString();
+       txtkodejenis.setText(kode);
+       String jenis = tb_barang.getValueAt(baris, 2).toString();
+       txtjenisbarang.setText(jenis);
     }//GEN-LAST:event_tb_barangMouseClicked
+
+    private void btnaddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnaddActionPerformed
+        // TODO add your handling code here:
+        String kode = txtkodejenis.getText();
+            String jenis = txtjenisbarang.getText();
+          
+            if ("".equals(kode) || "".equals(jenis))
+            {
+                JOptionPane.showMessageDialog(this, "Harap Lengkapi Data", "Error", JOptionPane.WARNING_MESSAGE);
+            } else {
+
+        try{ 
+               Connection c = koneksi.getkoneksi();
+               String sql = "INSERT INTO tblbarang VALUES (?,?)";
+               PreparedStatement p = c.prepareStatement(sql);
+               
+               p.setString(1, kode);
+               p.setString(2, jenis);
+               
+               p.executeUpdate();
+               p.close();
+               
+               JOptionPane.showMessageDialog(null,
+                       "Penyimpanan Data Berhasil");
+               
+            }catch(SQLException e){
+                JOptionPane.showMessageDialog(this,
+                        e.getMessage());
+            }finally{
+                    loadData();
+                    kosong();
+                    }
+            }
+    }//GEN-LAST:event_btnaddActionPerformed
 
     /**
      * @param args the command line arguments
