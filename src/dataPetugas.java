@@ -4,7 +4,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import javax.swing.table.DefaultTableModel;
-import static koneksi.koneksi.koneksi;
+import koneksi.koneksi;
+
 
 
 /*
