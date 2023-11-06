@@ -246,7 +246,7 @@ public class distributor extends javax.swing.JFrame {
         try{
             String sql = "SELECT * FROM tbdistributor";
             
-            Connection c = koneksi.getKoneksi();
+            Connection c = koneksi.getkoneksi();
             Statement s = c.createStatement();
             ResultSet r = s.executeQuery (sql);
             
@@ -295,7 +295,7 @@ public class distributor extends javax.swing.JFrame {
             } else {
             
             try{
-                Connection c = koneksi.getKoneksi();
+                Connection c = koneksi.getkoneksi();
                 String sql = "INSERT INTO tbdistributor VALUES (?, ?, ?, ?, ?,?)";
                 PreparedStatement p = c.prepareStatement(sql);
                 

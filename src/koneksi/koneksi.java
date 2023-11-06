@@ -20,7 +20,7 @@ public class koneksi {
     
     public static Connection koneksi;
 //    public static void main (String[] args){
-    public static Connection getKoneksi(){
+    public static Connection getkoneksi(){
         if (koneksi == null)
         {
             try{
@@ -37,6 +37,6 @@ public class koneksi {
         return koneksi;
      }
     public static void main(String args[]){
-        getKoneksi();
+        getkoneksi();
     }
 }
