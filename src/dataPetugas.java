@@ -1,8 +1,10 @@
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import koneksi.koneksi;
 
@@ -25,7 +27,7 @@ public class dataPetugas extends javax.swing.JFrame {
     public dataPetugas() {
         initComponents();
           loadData();
-//        kosong();
+          kosong();
     }
     
 
@@ -90,6 +92,11 @@ public class dataPetugas extends javax.swing.JFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
+        tablepetugas.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tablepetugasMouseClicked(evt);
+            }
+        });
         jScrollPane2.setViewportView(tablepetugas);
 
         btnclose.setText("Close");
@@ -116,6 +123,11 @@ public class dataPetugas extends javax.swing.JFrame {
         btnupdate.setText("Update");
 
         btndelete.setText("Delete");
+        btndelete.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btndeleteActionPerformed(evt);
+            }
+        });
 
         btncancel.setText("Cancel");
         btncancel.addActionListener(new java.awt.event.ActionListener() {
@@ -257,7 +269,7 @@ private void loadData(){
          model.addRow(new Object[]{
              r.getString(1),
              r.getString(2),
-             r.getDate(3),
+             r.getString(3),
              r.getString(4),
              r.getString(5)
          });
@@ -266,12 +278,55 @@ private void loadData(){
     }catch(SQLException e){
         System.out.println("Terjadi Error"+e.getMessage());
         
-        
-        
     }
 }
+private void kosong(){
+        txt_id.setText(null);
+        txtnama.setText(null);
+        txtalamat.setText(null);
+        txtemail.setText(null);
+        txt_telp.setText(null);
+    }
     private void btnsaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnsaveActionPerformed
         // TODO add your handling code here:
+        String id = txt_id.getText();
+        String nama = txtnama.getText();
+        String alamat = txtalamat.getText();
+        String email = txtemail.getText();
+        String telepon = txt_telp.getText();
+        
+        if ("".equals(id) || "".equals(nama) ||
+                "".equals(alamat) ||
+                "".equals(email) || "".equals(telepon))
+        {
+            JOptionPane.showMessageDialog(this,
+                    "Harap Lengkapi Data",
+                    "Error", JOptionPane.WARNING_MESSAGE);
+        } else {
+            
+            try{
+                Connection c = koneksi.getkoneksi();
+                String sql = "INSERT INTO tblpetugas VALUES (?,?,?,?,?)";
+                PreparedStatement p = c.prepareStatement(sql);
+                
+                p.setString(1, id);
+                p.setString(2, nama);
+                p.setString(3,alamat);
+                p.setString(4, email);
+                p.setString(5, telepon);
+                
+                p.executeUpdate();
+                p.close();
+                JOptionPane.showMessageDialog(null,
+                        "Penyimpanan Data Berhasil");
+            }catch(SQLException e){
+                JOptionPane.showMessageDialog(this,
+                        e.getMessage());
+            }finally{
+                loadData();
+                kosong();
+            }
+        }
     }//GEN-LAST:event_btnsaveActionPerformed
 
     private void btncancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btncancelActionPerformed
@@ -298,6 +353,59 @@ private void loadData(){
         String email = txtemail.getText();
         String telepon = txt_telp.getText();
     }//GEN-LAST:event_btnaddActionPerformed
+
+    private void tablepetugasMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tablepetugasMouseClicked
+        // TODO add your handling code here:
+        int baris = tablepetugas.getSelectedRow();
+        
+        if (baris == -1){
+            //tak ada baris terseleksi
+            return;
+        }
+        
+        String id = tablepetugas.getValueAt(baris, 0).toString();
+        txt_id.setText(id);
+        String nama = tablepetugas.getValueAt(baris, 1).toString();
+        txtnama.setText(nama);
+        String alamat = tablepetugas.getValueAt(baris, 2).toString();
+        txtalamat.setText(alamat);
+        String email = tablepetugas.getValueAt(baris, 3).toString();
+        txtemail.setText(email);
+        String telepon = tablepetugas.getValueAt(baris, 4).toString();
+        txt_telp.setText(telepon);
+    }//GEN-LAST:event_tablepetugasMouseClicked
+
+    private void btndeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btndeleteActionPerformed
+        // TODO add your handling code here:
+        int i = tablepetugas.getSelectedRow();
+        
+        if(i == -1){
+            JOptionPane.showMessageDialog(this,
+                    "Harap Pilih Data Terlebih Dahulu",
+                    "Error", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        
+        String id = (String) model.getValueAt(i, 0);
+        
+        try{
+            Connection c = koneksi.getkoneksi();
+            
+            String sql = "DELETE From tblpetugas WHERE NIS = ?";
+            
+            PreparedStatement p = c.prepareStatement(sql);
+            p.setString(1, id);
+            p.executeUpdate();
+            p.close();
+            
+             JOptionPane.showMessageDialog(null, "Ubah Data Berhasil");
+        } catch(SQLException e) {
+            JOptionPane.showMessageDialog(null, "Terjadi Error" + e.getMessage());
+        } finally {
+            loadData();
+            kosong();
+        }
+    }//GEN-LAST:event_btndeleteActionPerformed
 
     /**
      * @param args the command line arguments
