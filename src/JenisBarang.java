@@ -26,6 +26,23 @@ public class JenisBarang extends javax.swing.JFrame {
         loadData();
         kosong();
        
+        setEnabledfalse();
+    }
+    
+    public void setEnabledfalse(){
+        txtjenisbarang.setEnabled(false);
+        txtkodejenis.setEnabled(false);
+        btnsave.setEnabled(false);
+        btnupdate.setEnabled(false);
+        btndelete.setEnabled(false);
+    }
+    
+    public void setEnabledtrue(){
+        txtjenisbarang.setEnabled(true);
+        txtkodejenis.setEnabled(true);
+        btnsave.setEnabled(true);
+        btnupdate.setEnabled(true);
+        btndelete.setEnabled(true);
     }
     
    
@@ -123,7 +140,7 @@ public class JenisBarang extends javax.swing.JFrame {
                 btnaddActionPerformed(evt);
             }
         });
-        getContentPane().add(btnadd, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 260, 80, 20));
+        getContentPane().add(btnadd, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 260, 80, 20));
 
         btnsave.setText("Save");
         btnsave.addActionListener(new java.awt.event.ActionListener() {
@@ -131,7 +148,7 @@ public class JenisBarang extends javax.swing.JFrame {
                 btnsaveActionPerformed(evt);
             }
         });
-        getContentPane().add(btnsave, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 260, 70, 20));
+        getContentPane().add(btnsave, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 260, 70, 20));
 
         btndelete.setText("Delete");
         btndelete.addActionListener(new java.awt.event.ActionListener() {
@@ -139,12 +156,17 @@ public class JenisBarang extends javax.swing.JFrame {
                 btndeleteActionPerformed(evt);
             }
         });
-        getContentPane().add(btndelete, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 260, -1, 20));
+        getContentPane().add(btndelete, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 260, -1, 20));
 
         btncancel.setText("Cancel");
         getContentPane().add(btncancel, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 260, -1, 20));
 
         btnclose.setText("Close");
+        btnclose.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btncloseActionPerformed(evt);
+            }
+        });
         getContentPane().add(btnclose, new org.netbeans.lib.awtextra.AbsoluteConstraints(440, 260, 80, 20));
         getContentPane().add(txtkodejenis, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 40, 140, -1));
 
@@ -154,7 +176,7 @@ public class JenisBarang extends javax.swing.JFrame {
                 btnupdateActionPerformed(evt);
             }
         });
-        getContentPane().add(btnupdate, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 260, 80, 20));
+        getContentPane().add(btnupdate, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 260, 80, 20));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -254,6 +276,8 @@ public class JenisBarang extends javax.swing.JFrame {
             }finally{
                 loadData();
                 kosong();
+                setEnabledfalse();
+                btnadd.setEnabled(true);
             }
         }
     }//GEN-LAST:event_btnsaveActionPerformed
@@ -276,37 +300,14 @@ public class JenisBarang extends javax.swing.JFrame {
 
     private void btnaddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnaddActionPerformed
         // TODO add your handling code here:
-        String kode = txtkodejenis.getText();
-            String jenis = txtjenisbarang.getText();
-          
-            if ("".equals(kode) || "".equals(jenis))
-            {
-                JOptionPane.showMessageDialog(this, "Harap Lengkapi Data", "Error", JOptionPane.WARNING_MESSAGE);
-            } else {
-
-        try{ 
-               Connection c = koneksi.getkoneksi();
-               String sql = "INSERT INTO tblbarang VALUES (?,?)";
-               PreparedStatement p = c.prepareStatement(sql);
-               
-               p.setString(1, kode);
-               p.setString(2, jenis);
-               
-               p.executeUpdate();
-               p.close();
-               
-               JOptionPane.showMessageDialog(null,
-                       "Penyimpanan Data Berhasil");
-               
-            }catch(SQLException e){
-                JOptionPane.showMessageDialog(this,
-                        e.getMessage());
-            }finally{
-                    loadData();
-                    kosong();
-                    }
-            }
+        setEnabledtrue();
+        btnadd.setEnabled(false);
     }//GEN-LAST:event_btnaddActionPerformed
+
+    private void btncloseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btncloseActionPerformed
+        // TODO add your handling code here:
+        dispose();
+    }//GEN-LAST:event_btncloseActionPerformed
 
     /**
      * @param args the command line arguments
