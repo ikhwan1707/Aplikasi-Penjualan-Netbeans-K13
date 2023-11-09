@@ -443,7 +443,7 @@ public class distributor extends javax.swing.JFrame {
         String Telepon = txttelepon.getText();
         
         try{
-            Connection c = koneksi.getKoneksi();
+            Connection c = koneksi.getkoneksi();
             
             String sql = "UPDATE tbdistributor SET Nama = ?, Alamat =  ?, KotaAsal=  ?, Email=  ?,  Telepon=  ? WHERE IDDistributor =  ?";
             
@@ -487,7 +487,7 @@ public class distributor extends javax.swing.JFrame {
         String ID = (String) model.getValueAt(i, 0);
         
         try{
-            Connection c = koneksi.getKoneksi();
+            Connection c = koneksi.getkoneksi();
             
             String sql = "DELETE FROM tbdistributor WHERE IDDistributor = ?";
             
