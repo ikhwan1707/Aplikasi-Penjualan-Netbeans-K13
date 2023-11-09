@@ -121,6 +121,11 @@ public class dataPetugas extends javax.swing.JFrame {
         });
 
         btnupdate.setText("Update");
+        btnupdate.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnupdateActionPerformed(evt);
+            }
+        });
 
         btndelete.setText("Delete");
         btndelete.addActionListener(new java.awt.event.ActionListener() {
@@ -249,6 +254,7 @@ private void loadData(){
         model.fireTableDataChanged();
         
         tablepetugas.setModel(model);
+        model.addColumn("IDPetugas");
         model.addColumn("NamaPetugas");
         model.addColumn("Alamat");
         model.addColumn("Email");
@@ -347,11 +353,6 @@ private void kosong(){
 
     private void btnaddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnaddActionPerformed
         // TODO add your handling code here:
-        String id = txt_id.getText();
-        String nama = txtnama.getText();
-        String alamat = txtalamat.getText();
-        String email = txtemail.getText();
-        String telepon = txt_telp.getText();
     }//GEN-LAST:event_btnaddActionPerformed
 
     private void tablepetugasMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tablepetugasMouseClicked
@@ -391,7 +392,7 @@ private void kosong(){
         try{
             Connection c = koneksi.getkoneksi();
             
-            String sql = "DELETE From tblpetugas WHERE NIS = ?";
+            String sql = "DELETE From tblpetugas WHERE IDPetugas = ?";
             
             PreparedStatement p = c.prepareStatement(sql);
             p.setString(1, id);
@@ -406,6 +407,49 @@ private void kosong(){
             kosong();
         }
     }//GEN-LAST:event_btndeleteActionPerformed
+
+    private void btnupdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnupdateActionPerformed
+        // TODO add your handling code here:
+        int i = tablepetugas.getSelectedRow();
+        
+        if(i == -1){
+            //tidak ada baris tewrseleksi
+            JOptionPane.showMessageDialog(this, "harap pilih data terlebih dahulu", "error", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        
+        String id = (String) model.getValueAt(i, 0);
+        String nama = txtnama.getText();
+        String alamat = txtalamat.getText();
+        String email = txtemail.getText();
+        String telepon = txt_telp.getText();
+        
+        try{
+            
+            Connection c = koneksi.getkoneksi();
+
+            String sql = "UPDATE tblpetugas SET NamaPetugas = ?, Alamat = ?, Email = ?, Telpon = ? WHERE IDPetugas = ?";
+            
+            PreparedStatement p = c.prepareStatement(sql);
+            
+            p.setString(1, nama);
+            p.setString(2, email);
+            p.setString(3, telepon);
+            p.setString(4, alamat);
+            p.setString(5, id);
+            
+            p.executeUpdate();
+            p.close();
+            
+            JOptionPane.showMessageDialog(null,"Ubah Data Berhasil");
+        }catch(SQLException e){
+            JOptionPane.showMessageDialog(null,"Terjadi ERROR" + e.getMessage());
+        }finally{
+            loadData();
+            kosong();
+        }
+
+    }//GEN-LAST:event_btnupdateActionPerformed
 
     /**
      * @param args the command line arguments
