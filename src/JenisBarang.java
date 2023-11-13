@@ -16,6 +16,7 @@ import koneksi.koneksi;
  * @author utama
  */
 public class JenisBarang extends javax.swing.JFrame {
+    
     private DefaultTableModel model;
 
     /**
@@ -25,27 +26,11 @@ public class JenisBarang extends javax.swing.JFrame {
         initComponents();
         loadData();
         kosong();
-       
-        setEnabledfalse();
+        setEnabledFalse();
+        
+        
     }
     
-    public void setEnabledfalse(){
-        txtjenisbarang.setEnabled(false);
-        txtkodejenis.setEnabled(false);
-        btnsave.setEnabled(false);
-        btnupdate.setEnabled(false);
-        btndelete.setEnabled(false);
-    }
-    
-    public void setEnabledtrue(){
-        txtjenisbarang.setEnabled(true);
-        txtkodejenis.setEnabled(true);
-        btnsave.setEnabled(true);
-        btnupdate.setEnabled(true);
-        btndelete.setEnabled(true);
-    }
-    
-   
     private void loadData() {
         model = new DefaultTableModel();
         
@@ -79,8 +64,22 @@ public class JenisBarang extends javax.swing.JFrame {
     }
 
         private void kosong(){
-        txtkodejenis.setText(null);
-        txtjenisbarang.setText(null);
+            txtkodejenis.setText(null);
+            txtjenisbarang.setText(null);
+    }
+        public void setEnabledFalse(){
+        btnsave.setEnabled(false);
+        btndelete.setEnabled(false);
+        btncancel.setEnabled(false);
+        btnclose.setEnabled(false);
+        btnupdate.setEnabled(false);
+    }
+    
+        public void setEnabledtrue(){
+            btnsave.setEnabled(true);
+        btndelete.setEnabled(true);
+        btncancel.setEnabled(true);
+        btnclose.setEnabled(true);
     }
     /**
      * This method is called from within the constructor to initialize the form.
@@ -107,11 +106,11 @@ public class JenisBarang extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jLabel1.setText("Kode Jenis");
-        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 40, -1, -1));
+        jLabel1.setText("Kode barang");
+        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 40, -1, -1));
 
         jLabel2.setText("Jenis Barang");
-        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 70, -1, -1));
+        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 70, -1, -1));
         getContentPane().add(txtjenisbarang, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 70, 260, -1));
 
         tb_barang.setModel(new javax.swing.table.DefaultTableModel(
@@ -159,6 +158,11 @@ public class JenisBarang extends javax.swing.JFrame {
         getContentPane().add(btndelete, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 260, -1, 20));
 
         btncancel.setText("Cancel");
+        btncancel.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btncancelActionPerformed(evt);
+            }
+        });
         getContentPane().add(btncancel, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 260, -1, 20));
 
         btnclose.setText("Close");
@@ -183,76 +187,101 @@ public class JenisBarang extends javax.swing.JFrame {
 
     private void btndeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btndeleteActionPerformed
         // TODO add your handling code here:
-         int i = tb_barang.getSelectedRow();
-
+          int i = tb_barang.getSelectedRow();
+        
         if(i == -1){
-            JOptionPane.showMessageDialog(this, "harap pilih data terlebih dahulu", "Error", JOptionPane.WARNING_MESSAGE);
+            //tidak ada baris terseleksi
+            JOptionPane.showMessageDialog(this, "harap pilih data terlebih dahulu", "error", JOptionPane.WARNING_MESSAGE);
             return;
         }
-
-        String kode = (String) model.getValueAt(i, 0);
-        String Jenis = (String) model.getValueAt(i, 1);
-
+        
+        String KodeJenis = (String) model.getValueAt(i, 0);
+        
         try{
             Connection c = koneksi.getkoneksi();
-
-            String sql = "DELETE FROM tb_barang WHERE KodeJenis = ?";
-
+            
+            String sql = "DELETE FROM tbljenis WHERE KodeJenis = ?";
+            
             PreparedStatement p = c.prepareStatement(sql);
-            p.setString(1, kode);
-            p.setString(2, Jenis);
+            p.setString(1, KodeJenis);
             p.executeUpdate();
             p.close();
-
-            JOptionPane.showMessageDialog(null, "Hapus Data Berhasil");
-        }catch(SQLException e) {
-            JOptionPane.showMessageDialog(null, "terjadi error"+e.getMessage());
-        }finally{
+            
+            JOptionPane.showMessageDialog(null,
+                       "Hapus Data Berhasil");
+                
+            }catch(SQLException e){
+                JOptionPane.showMessageDialog(this,
+                        e.getMessage());
+                
+            }finally{
             loadData();
             kosong();
+        
         }
+        
+        setEnabledFalse();
+        btnadd.setEnabled(false);
+        btnsave.setEnabled(false);
+        btndelete.setEnabled(false);
+        btncancel.setEnabled(false);
+        btnclose.setEnabled(true);
     }//GEN-LAST:event_btndeleteActionPerformed
 
     private void btnupdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnupdateActionPerformed
         // TODO add your handling code here:
-        int i = tb_barang.getSelectedRow();
-
+         int i = tb_barang.getSelectedRow();
+        
         if(i == -1){
-            JOptionPane.showMessageDialog(this, "harap pilih data terlebih dahulu", "Error", JOptionPane.WARNING_MESSAGE);
+            //tidak ada baris terseleksi
+            JOptionPane.showMessageDialog(this, "harap pilih data terlebih dahulu", "error", JOptionPane.WARNING_MESSAGE);
             return;
         }
-        String kode = (String)model.getValueAt(i, 0);
-        String jenis = txtjenisbarang.getText();
-
+        
+        String KodeJenis= (String) model.getValueAt(i, 0);
+        String Jenis = txtjenisbarang.getText();
+        
+        
         try{
+            
             Connection c = koneksi.getkoneksi();
-
-            String sql = "UPDATE tbljenis SET kode_jenis = ? WHERE jenis_kode";
-
+            
+            String sql = "UPDATE tbljenis SET  Jenis = ? WHERE KodeJenis = ?";
+            
             PreparedStatement p = c.prepareStatement(sql);
-
-            p.setString(1, kode);
-            p.setString(2, jenis);
-
+            
+            p.setString(1, KodeJenis);
+            p.setString(2, Jenis);
+                
             p.executeUpdate();
             p.close();
-
-            JOptionPane.showMessageDialog(this, "Ubah Data Berhasil");
-
-        }catch(SQLException e){
-            JOptionPane.showMessageDialog(this,"Terjadi Error" + e.getMessage());
-        }finally{
-            loadData();
-            kosong();
+                
+                JOptionPane.showMessageDialog(null,
+                       "Ubah Data Berhasil");
+                
+            }catch(SQLException e){
+                JOptionPane.showMessageDialog(this,
+                        e.getMessage());
+                
+            }finally{
+                loadData();
+                kosong();
         }
+        
+        setEnabledFalse();
+        btnadd.setEnabled(false);
+        btnsave.setEnabled(false);
+        btndelete.setEnabled(false);
+        btncancel.setEnabled(false);
+        btnclose.setEnabled(true);
     }//GEN-LAST:event_btnupdateActionPerformed
 
     private void btnsaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnsaveActionPerformed
         // TODO add your handling code here:
-         String kode = txtkodejenis.getText();
-        String jenis = txtjenisbarang.getText();
+         String KodeJenis = txtkodejenis.getText();
+        String Jenis = txtjenisbarang.getText();
 
-        if ("".equals(kode)|| "".equals(jenis))
+        if ("".equals(KodeJenis)|| "".equals(Jenis))
 
         {
             JOptionPane.showMessageDialog(this, "harap lengkap data", "error", JOptionPane.WARNING_MESSAGE);
@@ -263,8 +292,8 @@ public class JenisBarang extends javax.swing.JFrame {
                 String sql = "INSERT INTO tbljenis ()VALUES (?,?)";
                 PreparedStatement p = c.prepareStatement(sql);
 
-                p.setString(1, kode);
-                p.setString(2, jenis);
+                p.setString(1, KodeJenis);
+                p.setString(2, Jenis);
 
                 p.executeUpdate();
                 p.close();
@@ -276,38 +305,59 @@ public class JenisBarang extends javax.swing.JFrame {
             }finally{
                 loadData();
                 kosong();
-                setEnabledfalse();
-                btnadd.setEnabled(true);
+            setEnabledFalse();
+            btnadd.setEnabled(true);
+            btnsave.setEnabled(false);
+            btndelete.setEnabled(false);
+            btncancel.setEnabled(false);
+            btnclose.setEnabled(true);
             }
         }
     }//GEN-LAST:event_btnsaveActionPerformed
 
     private void tb_barangMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tb_barangMouseClicked
         // TODO add your handling code here:
-        int baris = tb_barang.getSelectedRow();
+       int baris = tb_barang.getSelectedRow();
         
-        if(baris == -1){
-            //tak ada baris terseleksi
+        if (baris == -1) {
             return;
+        }
         
-    }    
+        String KodeJenis = tb_barang.getValueAt(baris, 0).toString();
+        String Jenis = tb_barang.getValueAt(baris, 1).toString();
+        txtkodejenis.setText(KodeJenis);
+        txtjenisbarang.setText(Jenis);
         
-       String kode = tb_barang.getValueAt(baris, 1).toString();
-       txtkodejenis.setText(kode);
-       String jenis = tb_barang.getValueAt(baris, 2).toString();
-       txtjenisbarang.setText(jenis);
+        setEnabledFalse();
+        btnadd.setEnabled(false);
+        btnsave.setEnabled(false);
+        btndelete.setEnabled(true);
+        btncancel.setEnabled(false);
+        btnupdate.setEnabled(true);
+        btnclose.setEnabled(true);
     }//GEN-LAST:event_tb_barangMouseClicked
 
     private void btnaddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnaddActionPerformed
         // TODO add your handling code here:
         setEnabledtrue();
-        btnadd.setEnabled(false);
     }//GEN-LAST:event_btnaddActionPerformed
 
     private void btncloseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btncloseActionPerformed
         // TODO add your handling code here:
         dispose();
     }//GEN-LAST:event_btncloseActionPerformed
+
+    private void btncancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btncancelActionPerformed
+        // TODO add your handling code here:
+        kosong();
+        
+        setEnabledFalse();
+        btnadd.setEnabled(false);
+        btnsave.setEnabled(false);
+        btndelete.setEnabled(false);
+        btncancel.setEnabled(false);
+        btnclose.setEnabled(true);
+    }//GEN-LAST:event_btncancelActionPerformed
 
     /**
      * @param args the command line arguments
