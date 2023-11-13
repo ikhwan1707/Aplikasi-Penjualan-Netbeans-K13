@@ -28,6 +28,30 @@ public class dataPetugas extends javax.swing.JFrame {
         initComponents();
           loadData();
           kosong();
+          
+          setEnabledfalse();
+          
+    }
+     public void setEnabledfalse(){
+        txt_id.setEnabled(false);
+        txtnama.setEnabled(false);
+        txtalamat.setEnabled(false);
+        txtemail.setEnabled(false);
+        txt_telp.setEnabled(false);
+        btnsave.setEnabled(false);
+        btnupdate.setEnabled(false);
+        btndelete.setEnabled(false);
+    }
+    
+    public void setEnabledtrue(){
+        txt_id.setEnabled(true);
+        txtnama.setEnabled(true);
+        txtalamat.setEnabled(true);
+        txtemail.setEnabled(true);
+        txt_telp.setEnabled(true);
+        btnsave.setEnabled(true);
+        btnupdate.setEnabled(true);
+        btndelete.setEnabled(true);
     }
     
 
@@ -341,6 +365,7 @@ private void kosong(){
 
     private void btncloseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btncloseActionPerformed
         // TODO add your handling code here:
+        dispose();
     }//GEN-LAST:event_btncloseActionPerformed
 
     private void txt_telpActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_telpActionPerformed
@@ -353,6 +378,8 @@ private void kosong(){
 
     private void btnaddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnaddActionPerformed
         // TODO add your handling code here:
+        setEnabledtrue();
+        btnadd.setEnabled(false);
     }//GEN-LAST:event_btnaddActionPerformed
 
     private void tablepetugasMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tablepetugasMouseClicked
@@ -399,7 +426,7 @@ private void kosong(){
             p.executeUpdate();
             p.close();
             
-             JOptionPane.showMessageDialog(null, "Ubah Data Berhasil");
+             JOptionPane.showMessageDialog(null, "Hapus Data Berhasil");
         } catch(SQLException e) {
             JOptionPane.showMessageDialog(null, "Terjadi Error" + e.getMessage());
         } finally {
