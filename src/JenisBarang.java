@@ -76,7 +76,7 @@ public class JenisBarang extends javax.swing.JFrame {
     }
     
         public void setEnabledtrue(){
-            btnsave.setEnabled(true);
+        btnsave.setEnabled(true);
         btndelete.setEnabled(true);
         btncancel.setEnabled(true);
         btnclose.setEnabled(true);
@@ -278,7 +278,7 @@ public class JenisBarang extends javax.swing.JFrame {
 
     private void btnsaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnsaveActionPerformed
         // TODO add your handling code here:
-         String KodeJenis = txtkodejenis.getText();
+        String KodeJenis = txtkodejenis.getText();
         String Jenis = txtjenisbarang.getText();
 
         if ("".equals(KodeJenis)|| "".equals(Jenis))
@@ -324,8 +324,8 @@ public class JenisBarang extends javax.swing.JFrame {
         }
         
         String KodeJenis = tb_barang.getValueAt(baris, 0).toString();
-        String Jenis = tb_barang.getValueAt(baris, 1).toString();
         txtkodejenis.setText(KodeJenis);
+        String Jenis = tb_barang.getValueAt(baris, 1).toString();
         txtjenisbarang.setText(Jenis);
         
         setEnabledFalse();
