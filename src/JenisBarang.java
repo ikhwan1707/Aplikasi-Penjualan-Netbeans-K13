@@ -250,8 +250,8 @@ public class JenisBarang extends javax.swing.JFrame {
             
             PreparedStatement p = c.prepareStatement(sql);
             
-            p.setString(1, KodeJenis);
-            p.setString(2, Jenis);
+            p.setString(2, KodeJenis);
+            p.setString(1, Jenis);
                 
             p.executeUpdate();
             p.close();
@@ -268,12 +268,6 @@ public class JenisBarang extends javax.swing.JFrame {
                 kosong();
         }
         
-        setEnabledFalse();
-        btnadd.setEnabled(false);
-        btnsave.setEnabled(false);
-        btndelete.setEnabled(false);
-        btncancel.setEnabled(false);
-        btnclose.setEnabled(true);
     }//GEN-LAST:event_btnupdateActionPerformed
 
     private void btnsaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnsaveActionPerformed
@@ -330,7 +324,7 @@ public class JenisBarang extends javax.swing.JFrame {
         
         setEnabledFalse();
         btnadd.setEnabled(false);
-        btnsave.setEnabled(false);
+        btnsave.setEnabled(true);
         btndelete.setEnabled(true);
         btncancel.setEnabled(false);
         btnupdate.setEnabled(true);
