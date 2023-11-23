@@ -1,4 +1,11 @@
-import java.awt.event.KeyEvent;
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JPanel.java to edit this template
+ */
+
+
+//import java.lang.System.Logger;
+//import java.lang.System.Logger.Level;
 import javax.swing.table.DefaultTableModel;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -6,57 +13,96 @@ import java.sql.Statement;
 import java.sql.PreparedStatement;
 import java.sql.Connection;
 import javax.swing.JOptionPane;
-import static javax.swing.text.html.HTML.Attribute.ID;
 import koneksi.koneksi;
-
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
- */
 
 /**
  *
- * @author smkiupro1
+ * @author asus
  */
-public class distributor extends javax.swing.JFrame {
-
-     private DefaultTableModel model;
+public class distributor extends javax.swing.JPanel {
+    
+    private DefaultTableModel model;
     
     /**
-     * Creates new form distributor
+     * Creates new form dashboard
      */
     public distributor() {
         initComponents();
         loadData();
         kosong();
+        setEnabledFalse();
+        btnsave.setEnabled(false);
+        btnupdate.setEnabled(false);
+        btndelete.setEnabled(false);
+        btncancel.setEnabled(false);
+    }
+
+    public void loadData(){
+        model = new DefaultTableModel();
+               
+        model.getDataVector().removeAllElements();
         
-        setEnabledfalse();
+        model.fireTableDataChanged();
+        
+        tabeldistributor.setModel(model);
+        model.addColumn("IDDistributor");
+        model.addColumn("NamaDistributor");
+        model.addColumn("Alamat");
+        model.addColumn("KotaAsal");
+        model.addColumn("Email");
+        model.addColumn("Telepon");
+        
+        try{
+            
+            String sql = "SELECT * FROM tbldistributor";
+            
+            Connection c = koneksi.getkoneksi();
+            Statement s = c.createStatement();
+            ResultSet r = s.executeQuery(sql);
+            
+            while(r.next()){
+                
+                model.addRow(new Object[]{
+                    r.getString(1),
+                    r.getString(2),
+                    r.getString(3),
+                    r.getString(4),
+                    r.getString(5),
+                    r.getString(6)
+                });
+            }
+            tabeldistributor.setModel(model);
+        }catch(SQLException e){
+            System.out.println("Terjadi Error"); 
+        }
     }
     
-    public void setEnabledfalse(){
+    public void kosong(){
+        txtid.setText(null);
+        txtnama.setText(null);
+        txtalamat.setText(null);
+        txtkota.setText(null);
+        txtemail.setText(null);
+        txttelepon.setText(null);
+    }
+    
+    public void setEnabledFalse(){
         txtid.setEnabled(false);
         txtnama.setEnabled(false);
         txtalamat.setEnabled(false);
         txtkota.setEnabled(false);
         txtemail.setEnabled(false);
         txttelepon.setEnabled(false);
-        btnsimpan.setEnabled(false);
-        btnubah.setEnabled(false);
-        btnhapus.setEnabled(false);
     }
     
-    public void setEnabledtrue(){
+    public void setEnabledTrue(){
         txtid.setEnabled(true);
         txtnama.setEnabled(true);
         txtalamat.setEnabled(true);
         txtkota.setEnabled(true);
         txtemail.setEnabled(true);
         txttelepon.setEnabled(true);
-        btnsimpan.setEnabled(true);
-        btnubah.setEnabled(true);
-        btnhapus.setEnabled(true);
     }
-
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -68,28 +114,30 @@ public class distributor extends javax.swing.JFrame {
 
         jScrollPane2 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
+        jPanel1 = new javax.swing.JPanel();
+        jPanel2 = new javax.swing.JPanel();
+        jPanel6 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
+        txtid = new javax.swing.JTextField();
+        txtnama = new javax.swing.JTextField();
+        txtkota = new javax.swing.JTextField();
+        txtemail = new javax.swing.JTextField();
+        txttelepon = new javax.swing.JTextField();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        txtalamat = new javax.swing.JTextArea();
+        btnadd = new javax.swing.JButton();
+        btnsave = new javax.swing.JButton();
+        btnupdate = new javax.swing.JButton();
+        btndelete = new javax.swing.JButton();
+        btncancel = new javax.swing.JButton();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
-        txtid = new javax.swing.JTextField();
-        txtnama = new javax.swing.JTextField();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        txtalamat = new javax.swing.JTextArea();
-        txtkota = new javax.swing.JTextField();
-        txtemail = new javax.swing.JTextField();
-        txttelepon = new javax.swing.JTextField();
-        jScrollPane3 = new javax.swing.JScrollPane();
-        tabelbarang = new javax.swing.JTable();
-        btntambah = new javax.swing.JButton();
-        btnsimpan = new javax.swing.JButton();
-        btnubah = new javax.swing.JButton();
-        btnhapus = new javax.swing.JButton();
-        btnbatal = new javax.swing.JButton();
-        btnclose = new javax.swing.JButton();
         jLabel7 = new javax.swing.JLabel();
+        jScrollPane4 = new javax.swing.JScrollPane();
+        tabeldistributor = new javax.swing.JTable();
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -104,19 +152,17 @@ public class distributor extends javax.swing.JFrame {
         ));
         jScrollPane2.setViewportView(jTable1);
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setPreferredSize(new java.awt.Dimension(692, 0));
+        setLayout(new java.awt.BorderLayout());
 
-        jLabel1.setText("ID Distributor");
+        jPanel2.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel2.setPreferredSize(new java.awt.Dimension(692, 0));
 
-        jLabel2.setText("Nama Distributor");
+        jPanel6.setBackground(new java.awt.Color(255, 255, 255));
 
-        jLabel3.setText("Alamat Distributor");
-
-        jLabel4.setText("Kota Asal");
-
-        jLabel5.setText("Email");
-
-        jLabel6.setText("Telepon");
+        jLabel1.setFont(new java.awt.Font("Yu Gothic UI", 1, 18)); // NOI18N
+        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel1.setText("Distributor");
 
         txtid.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -124,8 +170,28 @@ public class distributor extends javax.swing.JFrame {
             }
         });
         txtid.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtidKeyPressed(evt);
+            }
+        });
+
+        txtkota.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtkotaActionPerformed(evt);
+            }
+        });
+
+        txttelepon.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtteleponActionPerformed(evt);
+            }
+        });
+        txttelepon.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtteleponKeyPressed(evt);
+            }
             public void keyTyped(java.awt.event.KeyEvent evt) {
-                txtidKeyTyped(evt);
+                txtteleponKeyTyped(evt);
             }
         });
 
@@ -133,13 +199,54 @@ public class distributor extends javax.swing.JFrame {
         txtalamat.setRows(5);
         jScrollPane1.setViewportView(txtalamat);
 
-        txttelepon.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyTyped(java.awt.event.KeyEvent evt) {
-                txtteleponKeyTyped(evt);
+        btnadd.setText("ADD New");
+        btnadd.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnaddActionPerformed(evt);
             }
         });
 
-        tabelbarang.setModel(new javax.swing.table.DefaultTableModel(
+        btnsave.setText("Save");
+        btnsave.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnsaveActionPerformed(evt);
+            }
+        });
+
+        btnupdate.setText("Update");
+        btnupdate.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnupdateActionPerformed(evt);
+            }
+        });
+
+        btndelete.setText("Delete");
+        btndelete.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btndeleteActionPerformed(evt);
+            }
+        });
+
+        btncancel.setText("Cancel");
+        btncancel.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btncancelActionPerformed(evt);
+            }
+        });
+
+        jLabel2.setText("Id Distributor");
+
+        jLabel3.setText("Nama Distributor");
+
+        jLabel4.setText("Kota Asal");
+
+        jLabel5.setText("Email");
+
+        jLabel6.setText("Telepon");
+
+        jLabel7.setText("Alamat");
+
+        tabeldistributor.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -150,441 +257,363 @@ public class distributor extends javax.swing.JFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        tabelbarang.addMouseListener(new java.awt.event.MouseAdapter() {
+        tabeldistributor.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                tabelbarangMouseClicked(evt);
+                tabeldistributorMouseClicked(evt);
             }
         });
-        jScrollPane3.setViewportView(tabelbarang);
+        jScrollPane4.setViewportView(tabeldistributor);
 
-        btntambah.setText("Add New");
-        btntambah.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btntambahActionPerformed(evt);
-            }
-        });
-        btntambah.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
-            public void propertyChange(java.beans.PropertyChangeEvent evt) {
-                btntambahPropertyChange(evt);
-            }
-        });
-
-        btnsimpan.setText("Save");
-        btnsimpan.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnsimpanActionPerformed(evt);
-            }
-        });
-
-        btnubah.setText("Update");
-        btnubah.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnubahActionPerformed(evt);
-            }
-        });
-
-        btnhapus.setText("Delete");
-        btnhapus.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnhapusActionPerformed(evt);
-            }
-        });
-
-        btnbatal.setText("Cancel");
-        btnbatal.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnbatalActionPerformed(evt);
-            }
-        });
-
-        btnclose.setText("Close");
-        btnclose.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btncloseActionPerformed(evt);
-            }
-        });
-
-        jLabel7.setText("Maksimal 15 Digit");
-
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(btntambah)
-                        .addGap(18, 18, 18)
-                        .addComponent(btnsimpan)
-                        .addGap(18, 18, 18)
-                        .addComponent(btnubah)
-                        .addGap(18, 18, 18)
-                        .addComponent(btnhapus)
-                        .addGap(18, 18, 18)
-                        .addComponent(btnbatal)
-                        .addGap(18, 18, 18)
-                        .addComponent(btnclose))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel1)
-                            .addComponent(jLabel2)
-                            .addComponent(jLabel3)
-                            .addComponent(jLabel4)
-                            .addComponent(jLabel5)
-                            .addComponent(jLabel6))
-                        .addGap(25, 25, 25)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(txtid)
-                            .addComponent(txtnama)
-                            .addComponent(jScrollPane1)
-                            .addComponent(txtemail)
-                            .addComponent(txtkota)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(txttelepon, javax.swing.GroupLayout.PREFERRED_SIZE, 240, javax.swing.GroupLayout.PREFERRED_SIZE)
+        javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
+        jPanel6.setLayout(jPanel6Layout);
+        jPanel6Layout.setHorizontalGroup(
+            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel6Layout.createSequentialGroup()
+                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel6Layout.createSequentialGroup()
+                        .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel6Layout.createSequentialGroup()
+                                .addContainerGap()
+                                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 191, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jPanel6Layout.createSequentialGroup()
+                                .addGap(95, 95, 95)
+                                .addComponent(btnadd)
                                 .addGap(18, 18, 18)
-                                .addComponent(jLabel7)
-                                .addGap(0, 0, Short.MAX_VALUE)))))
+                                .addComponent(btnsave)
+                                .addGap(18, 18, 18)
+                                .addComponent(btnupdate)
+                                .addGap(18, 18, 18)
+                                .addComponent(btndelete)
+                                .addGap(18, 18, 18)
+                                .addComponent(btncancel))
+                            .addGroup(jPanel6Layout.createSequentialGroup()
+                                .addGap(55, 55, 55)
+                                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(jLabel2)
+                                    .addComponent(jLabel3)
+                                    .addComponent(jLabel4)
+                                    .addComponent(jLabel5))
+                                .addGap(49, 49, 49)
+                                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                    .addComponent(txtkota, javax.swing.GroupLayout.DEFAULT_SIZE, 147, Short.MAX_VALUE)
+                                    .addComponent(txtnama, javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(txtid, javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(txtemail))
+                                .addGap(33, 33, 33)
+                                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel6, javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(jLabel7, javax.swing.GroupLayout.Alignment.TRAILING))
+                                .addGap(18, 18, 18)
+                                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(txttelepon, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addGap(0, 60, Short.MAX_VALUE))
+                    .addComponent(jScrollPane4, javax.swing.GroupLayout.Alignment.TRAILING))
                 .addContainerGap())
-            .addComponent(jScrollPane3)
         );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(15, 15, 15)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1)
-                    .addComponent(txtid, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+        jPanel6Layout.setVerticalGroup(
+            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel6Layout.createSequentialGroup()
+                .addGap(17, 17, 17)
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel2)
-                    .addComponent(txtnama, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(42, 42, 42)
-                        .addComponent(jLabel3))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(18, 18, 18)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(19, 19, 19)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel4)
-                    .addComponent(txtkota, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(txtemail, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel5))
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel6)
+                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtid, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(txttelepon, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel7))
+                    .addComponent(jLabel2)
+                    .addComponent(jLabel6))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel6Layout.createSequentialGroup()
+                        .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(txtnama, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel3)
+                            .addComponent(jLabel7))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(txtkota, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel4))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(txtemail, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel5)))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 193, Short.MAX_VALUE)
+                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnadd)
+                    .addComponent(btnsave)
+                    .addComponent(btnupdate)
+                    .addComponent(btndelete)
+                    .addComponent(btncancel))
                 .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btntambah)
-                    .addComponent(btnsimpan)
-                    .addComponent(btnubah)
-                    .addComponent(btnhapus)
-                    .addComponent(btnbatal)
-                    .addComponent(btnclose))
+                .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 251, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
-        pack();
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jPanel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jPanel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, 747, Short.MAX_VALUE)
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, 532, Short.MAX_VALUE)
+        );
+
+        add(jPanel1, java.awt.BorderLayout.CENTER);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void loadData(){
-        model = new DefaultTableModel();
-        model.getDataVector().removeAllElements();      
-        model.fireTableDataChanged();
-        
-        tabelbarang.setModel(model);
-        model.addColumn("ID");
-        model.addColumn("Nama Distributor");
-        model.addColumn("Alamat Distributor");
-        model.addColumn("Kota Asal");
-        model.addColumn("Email");
-        model.addColumn("Telepon");
-        
-        try{
-            String sql = "SELECT * FROM tbdistributor";
-            
-            Connection c = koneksi.getkoneksi();
-            Statement s = c.createStatement();
-            ResultSet r = s.executeQuery (sql);
-            
-             while (r.next()){
-                model.addRow(new Object[]{
-                    r.getString(1),
-                    r.getString(2),
-                    r.getString(3),
-                    r.getString(4),
-                    r.getString(5),
-                    r.getString(6)
-                });  
-            }
-             tabelbarang.setModel(model);
-            }catch(SQLException e){
-                System.out.println("");
-        }
-    }
-    
-    private void kosong(){
-        txtid.setText(null);
-        txtnama.setText(null);
-        txtalamat.setText(null);
-        txtkota.setText(null);
-        txtemail.setText(null);
-        txttelepon.setText(null);
-    }
-    private void btnbatalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnbatalActionPerformed
+    private void txtkotaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtkotaActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_btnbatalActionPerformed
+    }//GEN-LAST:event_txtkotaActionPerformed
 
-    private void btntambahActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btntambahActionPerformed
+    private void tabeldistributorMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tabeldistributorMouseClicked
         // TODO add your handling code here:
-        setEnabledtrue();
-        btntambah.setEnabled(false);
-    }//GEN-LAST:event_btntambahActionPerformed
-
-    private void tabelbarangMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tabelbarangMouseClicked
-        // TODO add your handling code here:
- int baris = tabelbarang.getSelectedRow();
+        int baris = tabeldistributor.getSelectedRow();
         
-        if(baris == -1){
-//            tak ada baris terseleksi
+        if (baris == -1) {
             return;
         }
         
-        String ID = tabelbarang.getValueAt(baris, 0).toString();
-        txtid.setText(ID);
-        String Nama = tabelbarang.getValueAt(baris, 1).toString();
-        txtnama.setText(Nama);
-        String Alamat = tabelbarang.getValueAt(baris, 2).toString();
+        String IDDistributor = tabeldistributor.getValueAt(baris, 0).toString();
+        String NamaDistributor = tabeldistributor.getValueAt(baris, 1).toString();
+        String Alamat = tabeldistributor.getValueAt(baris, 2).toString();
+        String KotaAsal = tabeldistributor.getValueAt(baris, 3).toString();
+        String Email = tabeldistributor.getValueAt(baris, 4).toString();
+        String Telepon = tabeldistributor.getValueAt(baris, 5).toString();
+        txtid.setText(IDDistributor);
+        txtnama.setText(NamaDistributor);
         txtalamat.setText(Alamat);
-        String Kota = tabelbarang.getValueAt(baris, 3).toString();
-        txtkota.setText(Kota);
-        String Email = tabelbarang.getValueAt(baris, 4).toString();
+        txtkota.setText(KotaAsal);
         txtemail.setText(Email);
-        String Telepon = tabelbarang.getValueAt(baris, 5).toString();
         txttelepon.setText(Telepon);
-    }//GEN-LAST:event_tabelbarangMouseClicked
-
-    private void btnsimpanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnsimpanActionPerformed
-        // TODO add your handling code here:
-        String ID_Distributor = txtid.getText();
-        String Nama_Distributor = txtnama.getText();
-        String Alamat = txtalamat.getText();
-        String Kota_Asal = txtkota.getText();
-        String Email = txtemail.getText();
-        String Telepon = txttelepon.getText();
         
-        if("".equals(ID_Distributor) || "".equals(Nama_Distributor) ||
-                "".equals(Alamat) ||
-                "".equals(Kota_Asal) || "".equals(Email) || "".equals(Telepon))
-            {
-              JOptionPane.showMessageDialog(this, "Harap Lengkapi Data Terlebih Dahulu", "Error", JOptionPane.WARNING_MESSAGE);
-            } else {
+        setEnabledTrue();
+        btnupdate.setEnabled(true);
+        btndelete.setEnabled(true);
+        btncancel.setEnabled(true);
+        btnadd.setEnabled(false);
+    }//GEN-LAST:event_tabeldistributorMouseClicked
+
+    private void btnsaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnsaveActionPerformed
+        // TODO add your handling code here:
+        String id = txtid.getText();
+        String nama = txtnama.getText();
+        String alamat = txtalamat.getText();
+        String kota = txtkota.getText();
+        String email = txtemail.getText();
+        String telepon = txttelepon.getText();
+        
+        if ("".equals(id) || "".equals(nama) ||
+                "".equals(alamat)||"".equals(kota) || 
+                "".equals(email) || "".equals(telepon))
+        {
+            JOptionPane.showMessageDialog(this, "Harap Lengkapi Data", "error", JOptionPane.WARNING_MESSAGE);
+        } else {
             
             try{
                 Connection c = koneksi.getkoneksi();
-                String sql = "INSERT INTO tbdistributor VALUES (?, ?, ?, ?, ?,?)";
+                String sql = "insert into tbldistributor value (?, ?, ?, ?, ?, ?)";
                 PreparedStatement p = c.prepareStatement(sql);
                 
-                p.setString(1, ID_Distributor);
-                p.setString(2, Nama_Distributor);
-                p.setString(3, Alamat);
-                p.setString(4, Kota_Asal);
-                p.setString(5, Email);
-                p.setString(6, Telepon);
+                p.setString(1, id);
+                p.setString(2, nama);
+                p.setString(3, alamat);
+                p.setString(4, kota);
+                p.setString(5, email);
+                p.setString(6, telepon);
                 
                 p.executeUpdate();
                 p.close();
                 
-                JOptionPane.showMessageDialog(null,
-                        "Penyimpanan Data Berhasil");
-                
+                JOptionPane.showMessageDialog(null, "penyimpanan data berhasil");
+              
             }catch(SQLException e){
-                JOptionPane.showMessageDialog(this,
-                        e.getMessage());
+                JOptionPane.showMessageDialog(this, e.getMessage());
             }finally{
                 loadData();
                 kosong();
-                setEnabledfalse();
-                btntambah.setEnabled(true);
+                setEnabledTrue();
+               btnadd.setEnabled(true);
             }
         }
-    }//GEN-LAST:event_btnsimpanActionPerformed
-
-    private void btntambahPropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_btntambahPropertyChange
-        // TODO addint i = tabeldistributor.getSelectedRow();
-       
-    }//GEN-LAST:event_btntambahPropertyChange
-
-    private void btnubahActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnubahActionPerformed
-        // TODO add your handling code here:  
-        int i = tabelbarang.getSelectedRow();
         
-        if (i == -1){
-//            tidak ada baris terseleksi
-            JOptionPane.showMessageDialog(this,
-                    "Harap Pilih Data Terlebih Dahulu",
-                    "Eror", JOptionPane.WARNING_MESSAGE);
+        setEnabledFalse();
+        btnsave.setEnabled(false);
+        btnupdate.setEnabled(false);
+        btndelete.setEnabled(false);
+        btncancel.setEnabled(false);
+        btnadd.setEnabled(true);
+    }//GEN-LAST:event_btnsaveActionPerformed
+
+    private void btnupdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnupdateActionPerformed
+        // TODO add your handling code here:
+        int i = tabeldistributor.getSelectedRow();
+        
+        if(i == -1){
+            //tidak ada baris tewrseleksi
+            JOptionPane.showMessageDialog(this, "harap pilih data terlebih dahulu", "error", JOptionPane.WARNING_MESSAGE);
             return;
         }
         
-        String ID_Distributor = (String) model.getValueAt(i,0);
-        String Nama = txtnama.getText();
-        String Alamat = txtalamat.getText();
-        String Kota = txtkota.getText();
-        String Email = txtemail.getText();
-        String Telepon = txttelepon.getText();
+        String id = (String) model.getValueAt(i, 0);
+        String nama = txtnama.getText();
+        String alamat = txtalamat.getText();
+        String kota = txtkota.getText();
+        String email = txtemail.getText();
+        String telpon = txttelepon.getText();
         
         try{
+            
             Connection c = koneksi.getkoneksi();
-            
-            String sql = "UPDATE tbdistributor SET Nama = ?, Alamat =  ?, KotaAsal=  ?, Email=  ?,  Telepon=  ? WHERE IDDistributor =  ?";
-            
+
+            String sql = "UPDATE tbldistributor SET NamaDistributor = ?, Alamat = ?, KotaAsal = ?, Email = ?, Telpon = ? WHERE IDDistributor = ?";
             
             PreparedStatement p = c.prepareStatement(sql);
             
+            p.setString(1, nama);
+            p.setString(2, alamat);
+            p.setString(3, kota);
+            p.setString(4, email);
+            p.setString(5, telpon);
+            p.setString(6, id);
             
-                p.setString(1, Nama);
-                p.setString(2, Alamat);
-                p.setString(3, Kota);
-                p.setString(4, Email);
-                p.setString(5, Telepon);
-                p.setString(6, ID_Distributor);
-                
             p.executeUpdate();
             p.close();
             
-            JOptionPane.showMessageDialog(null,
-                    "Ubah Data Berhasil");
+            JOptionPane.showMessageDialog(null,"Ubah Data Berhasil");
         }catch(SQLException e){
-            JOptionPane.showMessageDialog(null,
-                    "Terjadi Eror" + e.getMessage());
+            JOptionPane.showMessageDialog(null,"Terjadi ERROR" + e.getMessage());
         }finally{
             loadData();
             kosong();
         }
-    }//GEN-LAST:event_btnubahActionPerformed
-
-    private void btnhapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnhapusActionPerformed
-        // TODO add your handling code here:
-      int i = tabelbarang.getSelectedRow();
         
-        if (i == -1){
-//            tidak ada baris terseleksi
-            JOptionPane.showMessageDialog(this,
-                    "Harap Pilih Data Terlebih Dahulu",
-                    "Eror", JOptionPane.WARNING_MESSAGE);
+        setEnabledFalse();
+        btnsave.setEnabled(false);
+        btnupdate.setEnabled(false);
+        btndelete.setEnabled(false);
+        btncancel.setEnabled(false);
+        btnadd.setEnabled(true);
+    }//GEN-LAST:event_btnupdateActionPerformed
+
+    private void btndeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btndeleteActionPerformed
+        // TODO add your handling code here:
+        int i = tabeldistributor.getSelectedRow();
+        
+        if(i == -1){
+            //tidak ada baris tewrseleksi
+            JOptionPane.showMessageDialog(this, "Harap Pilih Data Terlebih Dahulu", "ERROR", JOptionPane.WARNING_MESSAGE);
             return;
         }
         
-        String ID = (String) model.getValueAt(i, 0);
+        String id = (String) model.getValueAt(i, 0);
         
         try{
             Connection c = koneksi.getkoneksi();
             
-            String sql = "DELETE FROM tbdistributor WHERE IDDistributor = ?";
+            String sql = "DELETE FROM tbldistributor WHERE IDDistributor = ?";
             
             PreparedStatement p = c.prepareStatement(sql);
-            p.setString(1, ID);
+            p.setString(1, id);
             p.executeUpdate();
             p.close();
             
-            JOptionPane.showMessageDialog(null,
-                    "Hapus Data Berhasil");
-        }catch(SQLException e){
-            JOptionPane.showMessageDialog(null,
-                    "Terjadi Eror" + e.getMessage());
-        }finally{
+            JOptionPane.showMessageDialog(null, "Hapus Data Berhasil");
+        }catch (SQLException e){
+            JOptionPane.showMessageDialog(null, "Terjadi ERROR");
+        }finally {
             loadData();
             kosong();
-           
         }
-    }//GEN-LAST:event_btnhapusActionPerformed
+        
+        setEnabledFalse();
+        btnsave.setEnabled(false);
+        btnupdate.setEnabled(false);
+        btndelete.setEnabled(false);
+        btncancel.setEnabled(false);
+        btnadd.setEnabled(true);
+    }//GEN-LAST:event_btndeleteActionPerformed
 
-    private void btncloseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btncloseActionPerformed
+    private void btnaddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnaddActionPerformed
         // TODO add your handling code here:
-        dispose();
-    }//GEN-LAST:event_btncloseActionPerformed
+        setEnabledTrue();
+        btnsave.setEnabled(true);
+        btnupdate.setEnabled(true);
+        btndelete.setEnabled(true);
+        btncancel.setEnabled(true);
+        btnadd.setEnabled(false);
+    }//GEN-LAST:event_btnaddActionPerformed
+
+    private void btncancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btncancelActionPerformed
+        // TODO add your handling code here:
+        kosong();
+        setEnabledFalse();
+        btnsave.setEnabled(false);
+        btnupdate.setEnabled(false);
+        btndelete.setEnabled(false);
+        btncancel.setEnabled(false);
+        btnadd.setEnabled(true);
+    }//GEN-LAST:event_btncancelActionPerformed
 
     private void txtidActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtidActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtidActionPerformed
 
-    private void txtidKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtidKeyTyped
+    private void txtidKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtidKeyPressed
         // TODO add your handling code here:
-         char c = evt.getKeyChar();
-        if (! ((Character.isDigit(c) ||
-                (c == KeyEvent.VK_BACK_SPACE) ||
-                (c == KeyEvent.VK_DELETE))
-            )) {
-            getToolkit().beep();
-            JOptionPane.showMessageDialog(null, "Harap Masukan Angka 0-9 Untuk Mengisi ID Distributor!!");
-            evt.consume();
-      }
-    }//GEN-LAST:event_txtidKeyTyped
+    }//GEN-LAST:event_txtidKeyPressed
 
-    private void txtteleponKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtteleponKeyTyped
+    private void txtteleponKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtteleponKeyPressed
         // TODO add your handling code here:
-         char c = evt.getKeyChar();
-        if (! ((Character.isDigit(c) ||
-                (c == KeyEvent.VK_BACK_SPACE) ||
-                (c == KeyEvent.VK_DELETE))
-            )) {
-            getToolkit().beep();
-            JOptionPane.showMessageDialog(null, "Nomer Telepon Hanya Bisa Di Isi Menggunakan Angka!!!");
-            evt.consume();
-      }
+        char a = evt.getKeyChar();
+        if (Character.isLetter(a)){
+            txtid.setEditable(false);
+           JOptionPane.showConfirmDialog(null, "Tidak bisa mengunakan huruf",
+                   "Nomor Telepon", JOptionPane.DEFAULT_OPTION);
+        }else {
+            txtid.setEditable(true);
+        }
+    }//GEN-LAST:event_txtteleponKeyPressed
+    
+    private void txtteleponKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtteleponKeyTyped
+//         TODO add your handling code here:
+        char c = evt.getKeyChar();
+    if (!Character.isDigit(c) || txttelepon.getText().length() >= 13) {
+        evt.consume(); // Mencegah karakter dimasukkan ke dalam teks
+    }
     }//GEN-LAST:event_txtteleponKeyTyped
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(distributor.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(distributor.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(distributor.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(distributor.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
+    private void txtteleponActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtteleponActionPerformed
+        // TODO add your handling code here:
+        
+    }//GEN-LAST:event_txtteleponActionPerformed
 
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new distributor().setVisible(true);
-            }
-        });
-    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnbatal;
-    private javax.swing.JButton btnclose;
-    private javax.swing.JButton btnhapus;
-    private javax.swing.JButton btnsimpan;
-    private javax.swing.JButton btntambah;
-    private javax.swing.JButton btnubah;
+    private javax.swing.JButton btnadd;
+    private javax.swing.JButton btncancel;
+    private javax.swing.JButton btndelete;
+    private javax.swing.JButton btnsave;
+    private javax.swing.JButton btnupdate;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -592,11 +621,14 @@ public class distributor extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel6;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JTable jTable1;
-    private javax.swing.JTable tabelbarang;
+    private javax.swing.JTable tabeldistributor;
     private javax.swing.JTextArea txtalamat;
     private javax.swing.JTextField txtemail;
     private javax.swing.JTextField txtid;
@@ -604,5 +636,4 @@ public class distributor extends javax.swing.JFrame {
     private javax.swing.JTextField txtnama;
     private javax.swing.JTextField txttelepon;
     // End of variables declaration//GEN-END:variables
-
 }
